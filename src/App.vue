@@ -1,24 +1,15 @@
 <template>
   <div id="app">
-    <controls></controls>
-    <editor></editor>
+    <MainPage></MainPage>
   </div>
 </template>
 
 <script>
-  import controls from '@/components/Controls.vue'
-  import editor from '@/components/Editor.vue'
+  import MainPage from '@/components/MainPage.vue'
 
   export default {
     components: {
-      controls,
-      editor
+      MainPage
     }
   }
 </script>
-
-<style>
-  * {
-    text-align: center;
-  }
-</style>
