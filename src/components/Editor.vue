@@ -3,8 +3,8 @@
     <div id="editor">
       <textarea id="area" v-model="content"></textarea>
       <div class="panel">
-        <button v-on:click="save">Save</button>
-        <button v-on:click="mdDelete">Delete</button>
+        <button v-on:click="saveMd">Save</button>
+        <button v-on:click="deleteMd">Delete</button>
       </div>
     </div>
     <div id="viewer" v-html="getMd"></div>
@@ -14,6 +14,7 @@
 <script>
   import $ from 'jquery'
   import marked from 'marked'
+  import constants from '@/constants'
   import controls from '@/components/Controls.vue'
 
   export default {
@@ -22,10 +23,11 @@
     },
 
     methods: {
-      save: function () {
-        if (controls.selected === '') return
+      saveMd: function () {
+        if (controls.selected === undefined) return
+        console.log('saving ' + controls.selected)
         $.ajax({
-          url: '/api/md/' + controls.selected,
+          url: constants.apiRoot() + '/api/md/' + controls.selected,
           method: 'PUT',
           data: {
             'content': this.content
@@ -37,10 +39,11 @@
         })
       },
 
-      mdDelete: function () {
-        if (controls.selected === '') return
+      deleteMd: function () {
+        if (controls.selected === undefined) return
+        console.log('deleting ' + controls.selected)
         $.ajax({
-          url: '/api/md/' + controls.selected,
+          url: constants.apiRoot() + '/api/md/' + controls.selected,
           method: 'DELETE'
         }).done(function () {
           controls.selected = ''

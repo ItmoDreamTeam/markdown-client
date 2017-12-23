@@ -4,8 +4,8 @@
       <input placeholder="Name" v-model="mdName">
       <button v-on:click="createMd">Add</button>
     </div>
-    <div id="mdList">
-      <div class="list-item" v-for="md in mds" v-on:click="mdSelect(md)">
+    <div>
+      <div class="list-item" v-for="md in mds" v-on:click="selectMd(md)">
         <div v-if="md._id === selected" style="background-color: aqua">{{md._id}}</div>
         <div v-else>{{md._id}}</div>
       </div>
@@ -15,6 +15,7 @@
 
 <script>
   import $ from 'jquery'
+  import constants from '@/constants'
   import editor from '@/components/Editor.vue'
 
   export default {
@@ -30,26 +31,35 @@
       createMd: function () {
         this.mdName = this.mdName.trim()
         if (this.mdName === '') return
-        $.post('/api/md', {
+        console.log('creating ' + this.mdName)
+        const self = this
+        $.post(constants.apiRoot() + '/api/md', {
           'name': this.mdName
         }, function () {
-          this.refresh()
+          self.refresh()
         }).fail(function (error) {
           alert(error.responseText)
         })
       },
 
-      mdSelect: function (md) {
+      selectMd: function (md) {
+        console.log('selected id=' + md._id)
         this.selected = md._id
         editor.content = md.content
       },
 
       refresh: function () {
+        console.log('refreshing')
         this.mdName = ''
-        $.get('/api/md', function (response, status) {
-          this.mds = response.reverse()
+        const self = this
+        $.get(constants.apiRoot() + '/api/md', function (response, status) {
+          self.mds = response.reverse()
         })
       }
+    },
+
+    mounted: function () {
+      this.refresh()
     }
   }
 </script>
