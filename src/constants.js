@@ -1,5 +1,5 @@
 export default {
   apiRoot: function () {
-    return 'http://localhost:88'
+    return 'http://46.101.213.98:88'
   }
 }
